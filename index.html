@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telebot Library Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        .code-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .copy-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telebot Library in Python</h1>
+        <h2>Introduction</h2>
+        <p>The <code>telebot</code> library, also known as <code>pyTelegramBotAPI</code>, is a Python wrapper for the Telegram Bot API. It allows developers to create bots that can interact with users, send messages, handle commands, and more.</p>
+
+        <h2>Installation</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code1')">Copy Code</button>
+            <pre id="code1"><code>pip install pyTelegramBotAPI</code></pre>
+        </div>
+
+        <h2>Basic Setup</h2>
+        <h3>Import the library</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code2')">Copy Code</button>
+            <pre id="code2"><code>import telebot</code></pre>
+        </div>
+
+        <h3>Create a bot instance</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code3')">Copy Code</button>
+            <pre id="code3"><code>bot = telebot.TeleBot("YOUR_API_KEY_HERE")</code></pre>
+        </div>
+
+        <h2>Handling Messages</h2>
+        <h3>Responding to Text Messages</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code4')">Copy Code</button>
+            <pre id="code4"><code>
+@bot.message_handler(content_types=['text'])
+def handle_text(message):
+    bot.reply_to(message, "You said: " + message.text)
+            </code></pre>
+        </div>
+
+        <h3>Command Handlers</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code5')">Copy Code</button>
+            <pre id="code5"><code>
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    bot.reply_to(message, "Welcome to the bot! Type /help to see available commands.")
+            </code></pre>
+        </div>
+
+        <h3>Filtering Messages</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code6')">Copy Code</button>
+            <pre id="code6"><code>
+@bot.message_handler(func=lambda message: message.text and 'hello' in message.text.lower())
+def handle_hello(message):
+    bot.reply_to(message, "Hello there!")
+            </code></pre>
+        </div>
+
+        <h2>Sending Messages</h2>
+        <h3>Simple Text Message</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code7')">Copy Code</button>
+            <pre id="code7"><code>bot.send_message(chat_id, "Hello, World!")</code></pre>
+        </div>
+
+        <h3>Markdown and HTML Formatting</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code8')">Copy Code</button>
+            <pre id="code8"><code>
+bot.send_message(chat_id, "This is *bold* text", parse_mode='Markdown')
+bot.send_message(chat_id, "<b>This is bold text</b>", parse_mode='HTML')
+            </code></pre>
+        </div>
+
+        <h2>Inline Keyboards</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code9')">Copy Code</button>
+            <pre id="code9"><code>
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+markup = InlineKeyboardMarkup()
+markup.row_width = 2
+markup.add(InlineKeyboardButton("Button 1", callback_data="btn1"),
+           InlineKeyboardButton("Button 2", callback_data="btn2"))
+
+bot.send_message(chat_id, "Choose an option:", reply_markup=markup)
+            </code></pre>
+        </div>
+
+        <h3>Handling Callback Queries</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code10')">Copy Code</button>
+            <pre id="code10"><code>
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    if call.data == "btn1":
+        bot.answer_callback_query(call.id, "You clicked Button 1")
+    elif call.data == "btn2":
+        bot.answer_callback_query(call.id, "You clicked Button 2")
+            </code></pre>
+        </div>
+
+        <h2>Polling and Webhooks</h2>
+        <h3>Polling</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code11')">Copy Code</button>
+            <pre id="code11"><code>bot.polling(none_stop=True)</code></pre>
+        </div>
+
+        <h3>Webhooks</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code12')">Copy Code</button>
+            <pre id="code12"><code>bot.set_webhook(url="https://yourdomain.com/YOUR_API_KEY")</code></pre>
+        </div>
+
+        <h2>Advanced Features</h2>
+        <h3>Sending Photos</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code13')">Copy Code</button>
+            <pre id="code13"><code>
+photo = open('path/to/photo.jpg', 'rb')
+bot.send_photo(chat_id, photo)
+            </code></pre>
+        </div>
+
+        <h3>Sending Documents</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code14')">Copy Code</button>
+            <pre id="code14"><code>
+document = open('path/to/document.pdf', 'rb')
+bot.send_document(chat_id, document)
+            </code></pre>
+        </div>
+
+        <h3>Sending Location</h3>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code15')">Copy Code</button>
+            <pre id="code15"><code>bot.send_location(chat_id, latitude, longitude)</code></pre>
+        </div>
+
+        <h2>Error Handling</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code16')">Copy Code</button>
+            <pre id="code16"><code>
+@bot.error_handler
+def handle_error(exception):
+    print(f"An error occurred: {exception}")
+            </code></pre>
+        </div>
+
+        <h2>Handling Different Message Types</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code17')">Copy Code</button>
+            <pre id="code17"><code>
+@bot.message_handler(content_types=['photo'])
+def handle_photo(message):
+    bot.reply_to(message, "Nice photo!")
+
+@bot.message_handler(content_types=['sticker'])
+def handle_sticker(message):
+    bot.reply_to(message, "Cool sticker!")
+
+@bot.message_handler(content_types=['location'])
+def handle_location(message):
+    bot.reply_to(message, "Great location!")
+            </code></pre>
+        </div>
+
+        <h2>Sending Voice Messages and Audio</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code18')">Copy Code</button>
+            <pre id="code18"><code>
+voice = open('path/to/voice.ogg', 'rb')
+bot.send_voice(chat_id, voice)
+
+audio = open('path/to/audio.mp3', 'rb')
+bot.send_audio(chat_id, audio)
+            </code></pre>
+        </div>
+
+        <h2>Using Custom Keyboards</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code19')">Copy Code</button>
+            <pre id="code19"><code>
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+
+markup = ReplyKeyboardMarkup(row_width=2)
+markup.add(KeyboardButton('Button 1'), KeyboardButton('Button 2'))
+
+bot.send_message(chat_id, "Choose an option:", reply_markup=markup)
+            </code></pre>
+        </div>
+
+        <h2>Removing Keyboards</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code20')">Copy Code</button>
+            <pre id="code20"><code>
+from telebot.types import ReplyKeyboardRemove
+
+markup = ReplyKeyboardRemove()
+bot.send_message(chat_id, "Keyboard removed", reply_markup=markup)
+            </code></pre>
+        </div>
+
+        <h2>Inline Query Handling</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code21')">Copy Code</button>
+            <pre id="code21"><code>
+@bot.inline_handler(lambda query: len(query.query) > 0)
+def query_text(query):
+    results = []
+    single_msg = telebot.types.InlineQueryResultArticle(
+        id='1', title="Result",
+        description="Description",
+        input_message_content=telebot.types.InputTextMessageContent(
+            message_text="This is a test message"
+        )
+    )
+    results.append(single_msg)
+    bot.answer_inline_query(query.id, results)
+            </code></pre>
+        </div>
+
+        <h2>Using State Machines</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code22')">Copy Code</button>
+            <pre id="code22"><code>
+user_states = {}
+
+def get_user_state(user_id):
+    return user_states.get(user_id, "default")
+
+def set_user_state(user_id, state):
+    user_states[user_id] = state
+
+@bot.message_handler(commands=['start'])
+def start_command(message):
+    set_user_state(message.from_user.id, "awaiting_name")
+    bot.send_message(message.chat.id, "What's your name?")
+
+@bot.message_handler(func=lambda message: get_user_state(message.from_user.id) == "awaiting_name")
+def ask_name(message):
+    set_user_state(message.from_user.id, "default")
+    bot.send_message(message.chat.id, f"Nice to meet you, {message.text}!")
+            </code></pre>
+        </div>
+
+        <h2>Middleware</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code23')">Copy Code</button>
+            <pre id="code23"><code>
+@bot.middleware_handler(update_types=['message'])
+def middleware_handler(bot_instance, message):
+    print(f"Message received from {message.from_user.username}: {message.text}")
+            </code></pre>
+        </div>
+
+        <h2>Scheduling Tasks</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code24')">Copy Code</button>
+            <pre id="code24"><code>
+import schedule
+import time
+
+def scheduled_task():
+    bot.send_message(chat_id, "This is a scheduled message")
+
+schedule.every().day.at("10:30").do(scheduled_task)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+            </code></pre>
+        </div>
+
+        <h2>Logging</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code25')">Copy Code</button>
+            <pre id="code25"><code>
+import logging
+
+telebot.logger.setLevel(logging.DEBUG)
+            </code></pre>
+        </div>
+
+        <h2>Rate Limiting</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code26')">Copy Code</button>
+            <pre id="code26"><code>
+import time
+
+last_message_time = {}
+
+def rate_limit(chat_id, limit=1):
+    now = time.time()
+    if chat_id in last_message_time and (now - last_message_time[chat_id] < limit):
+        return False
+    last_message_time[chat_id] = now
+    return True
+
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    if rate_limit(message.chat.id):
+        bot.reply_to(message, "Message received")
+    else:
+        bot.reply_to(message, "You're sending messages too quickly, please slow down")
+            </code></pre>
+        </div>
+
+        <h2>Database Integration</h2>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode('code27')">Copy Code</button>
+            <pre id="code27"><code>
+import sqlite3
+
+conn = sqlite3.connect('bot.db')
+cursor = conn.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)''')
+
+@bot.message_handler(commands=['register'])
+def register_user(message):
+    cursor.execute("INSERT INTO users (id, name) VALUES (?, ?)", (message.from_user.id, message.from_user.username))
+    conn.commit()
+    bot.send_message(message.chat.id, "You have been registered")
+            </code></pre>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(codeId) {
+            const codeElement = document.getElementById(codeId);
+            const codeText = codeElement.innerText.trim();
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert('Code copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
